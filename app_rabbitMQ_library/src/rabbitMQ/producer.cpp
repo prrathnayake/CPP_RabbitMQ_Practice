@@ -10,7 +10,7 @@ rabbitMQ::RabbitMQprocuder::RabbitMQprocuder(std::string url, std::string exchan
     rabbitMQexchange = amqp.createExchange(exchange);
     rabbitMQexchange->Declare(exchange, "fanout");
 
-    AMQPQueue *rabbitMQqueue = amqp.createQueue(queue);
+    rabbitMQqueue = amqp.createQueue(queue);
     rabbitMQqueue->Declare();
     rabbitMQqueue->Bind(exchange, "");
 

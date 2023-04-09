@@ -15,18 +15,18 @@ file(GLOB files
 
 add_executable(${PROJECT_NAME} ${files})
 
-find_package(rabbitmq-c REQUIRED)
+target_link_libraries(${PROJECT_NAME}
+     PUBLIC app_utils)
 
 target_link_libraries(${PROJECT_NAME}
      PUBLIC app_utils
-     amqpcpp)
-
-target_link_libraries(${PROJECT_NAME}
-     PUBLIC app_utils
+     PUBLIC app_rabbitMQ_library
 )
 
 target_include_directories(${PROJECT_NAME}
-     PUBLIC app_utils/src)
+     PUBLIC app_utils/src
+     PUBLIC app_rabbitMQ_library/src)
 
 message(STATUS "Adding subdirectories to package")
 add_subdirectory(app_utils/src)
+add_subdirectory(app_rabbitMQ_library/src)

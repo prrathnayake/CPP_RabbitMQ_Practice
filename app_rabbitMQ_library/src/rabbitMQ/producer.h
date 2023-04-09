@@ -8,6 +8,7 @@ namespace rabbitMQ
     {
     private:
         AMQPExchange *rabbitMQexchange;
+        AMQPQueue *rabbitMQqueue;
 
     public:
         RabbitMQprocuder(std::string url, std::string exchange, std::string queue);
