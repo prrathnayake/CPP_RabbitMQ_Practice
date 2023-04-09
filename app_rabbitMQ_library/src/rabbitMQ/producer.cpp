@@ -3,7 +3,11 @@
 #include "AMQPcpp.h"
 #include "producer.h"
 
-rabbitMQ::RabbitMQprocuder::RabbitMQprocuder(std::string url, std::string exchange, std::string queue)
+rabbitMQ::RabbitMQprocuder::RabbitMQprocuder()
+{
+}
+
+void rabbitMQ::RabbitMQprocuder::produceMessage(std::string url, std::string exchange, std::string queue, std::string message, std::string key)
 {
     AMQP amqp(url);
 
@@ -17,11 +21,7 @@ rabbitMQ::RabbitMQprocuder::RabbitMQprocuder(std::string url, std::string exchan
     rabbitMQexchange->setHeader("Delivery-mode", 2);
     rabbitMQexchange->setHeader("Content-type", "text/text");
     rabbitMQexchange->setHeader("Content-encoding", "UTF-8");
-}
-
-void rabbitMQ::RabbitMQprocuder::produceMessage(std::string message)
-{
-    rabbitMQexchange->Publish(message, "");
+    rabbitMQexchange->Publish(message, key);
 }
 
 rabbitMQ::RabbitMQprocuder::~RabbitMQprocuder() {}

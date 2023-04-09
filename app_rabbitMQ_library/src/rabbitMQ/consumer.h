@@ -9,8 +9,8 @@ namespace rabbitMQ
 	public:
 		AMQPQueue *rabbitMQqueue;
 
-		RabbitMQconsumer(std::string url, std::string queue);
+		RabbitMQconsumer();
 		~RabbitMQconsumer();
-		void consumeMessages();
+		void consumeMessages(std::string url, std::string queue);
 	};
 }

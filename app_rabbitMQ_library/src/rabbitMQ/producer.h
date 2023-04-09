@@ -11,8 +11,8 @@ namespace rabbitMQ
         AMQPQueue *rabbitMQqueue;
 
     public:
-        RabbitMQprocuder(std::string url, std::string exchange, std::string queue);
-        void produceMessage(std::string message);
+        RabbitMQprocuder();
+        void produceMessage(std::string url, std::string exchange, std::string queue, std::string message, std::string key);
         ~RabbitMQprocuder();
     };
 }

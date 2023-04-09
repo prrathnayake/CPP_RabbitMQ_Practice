@@ -1,35 +1,39 @@
 #pragma once
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 #include <utils/ThreadPool.h>
 #include <rabbitMQ/producer.h>
 #include <rabbitMQ/consumer.h>
 
-void sendMessage(rabbitMQ::RabbitMQprocuder *rabbitMQproducer)
+void sendMessage(rabbitMQ::RabbitMQprocuder *rabbitMQproducer, std::string url, std::string exchange, std::string queue)
 {
-    rabbitMQproducer->produceMessage("Hello");
+    rabbitMQproducer->produceMessage(url, exchange, queue, "Hello", "key");
 }
 
-void consumeMessage(rabbitMQ::RabbitMQconsumer *rabbitMQconsumer)
+void consumeMessage(rabbitMQ::RabbitMQconsumer *rabbitMQconsumer, std::string url, std::string queue)
 {
-    rabbitMQconsumer->consumeMessages();
+    rabbitMQconsumer->consumeMessages(url, queue);
 }
 
 int main()
 {
     utils::ThreadPool pool;
-    // pool.addThread("consumer");
+    pool.addThread("consumer");
     pool.addThread("producer");
 
     std::string url = "fhmsdkaj:mV5nq8WyrPVOvJhCmgrnm0c2ZxGhl03p@vulture.rmq.cloudamqp.com:5672/fhmsdkaj";
     std::string exchange = "exchange";
     std::string queue = "queue";
 
-    // rabbitMQ::RabbitMQconsumer *rabbitMQconsumer = new rabbitMQ::RabbitMQconsumer(url, queue);
-    // pool.addTask("consumer", std::bind(consumeMessage, rabbitMQconsumer));
+    rabbitMQ::RabbitMQconsumer *rabbitMQconsumer = new rabbitMQ::RabbitMQconsumer();
+    pool.addTask("consumer", std::bind(consumeMessage, rabbitMQconsumer, url, queue));
+    
+    std::this_thread::sleep_for(std::chrono::seconds(5));
 
-    rabbitMQ::RabbitMQprocuder *rabbitMQproducer = new rabbitMQ::RabbitMQprocuder(url, exchange, queue);
-    pool.addTask("producer", std::bind(sendMessage, rabbitMQproducer));
+    rabbitMQ::RabbitMQprocuder *rabbitMQproducer = new rabbitMQ::RabbitMQprocuder();
+    pool.addTask("producer", std::bind(sendMessage, rabbitMQproducer, url, exchange, queue));
 
     pool.joinAll();
     return 0;

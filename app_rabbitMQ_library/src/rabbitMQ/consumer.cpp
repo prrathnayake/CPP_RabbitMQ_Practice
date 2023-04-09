@@ -3,16 +3,16 @@
 #include "AMQPcpp.h"
 #include "consumer.h"
 
-rabbitMQ::RabbitMQconsumer::RabbitMQconsumer(std::string url, std::string queue)
+rabbitMQ::RabbitMQconsumer::RabbitMQconsumer()
 {
-    AMQP amqp(url);
-
-    rabbitMQqueue = amqp.createQueue(queue);
-    rabbitMQqueue->Declare();
 }
 
-void rabbitMQ::RabbitMQconsumer::consumeMessages()
+void rabbitMQ::RabbitMQconsumer::consumeMessages(std::string url, std::string queue)
 {
+    AMQP amqp(url);
+    rabbitMQqueue = amqp.createQueue(queue);
+    rabbitMQqueue->Declare();
+
     while (1)
     {
         rabbitMQqueue->Get(AMQP_NOACK);
@@ -34,4 +34,4 @@ void rabbitMQ::RabbitMQconsumer::consumeMessages()
     }
 }
 
-rabbitMQ::RabbitMQconsumer::~RabbitMQconsumer(){}
+rabbitMQ::RabbitMQconsumer::~RabbitMQconsumer() {}
