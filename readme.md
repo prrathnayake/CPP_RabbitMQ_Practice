@@ -5,7 +5,7 @@
 
 ### installation
 
-+ git clone git@github.com:prrathnayake/CPP_RabbitMQ_Practice.git
++ git clone https://github.com/prrathnayake/CPP_RabbitMQ_Practice.git
 + cd CPP_RabbitMQ_Practice
 + mkdir build
 + cd build
