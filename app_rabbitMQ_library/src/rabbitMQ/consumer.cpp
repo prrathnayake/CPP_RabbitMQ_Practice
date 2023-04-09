@@ -13,8 +13,9 @@ void rabbitMQ::RabbitMQconsumer::consumeMessages(std::string url, std::string qu
     rabbitMQqueue = amqp.createQueue(queue);
     rabbitMQqueue->Declare();
 
-    while (1)
+    while (consume)
     {
+    again:
         rabbitMQqueue->Get(AMQP_NOACK);
 
         AMQPMessage *rabbitMQmessage = rabbitMQqueue->getMessage();
@@ -25,11 +26,16 @@ void rabbitMQ::RabbitMQconsumer::consumeMessages(std::string url, std::string qu
             onMessage(rabbitMQmessage->getMessage(&j));
         }
         else
-            break;
+            goto again;
     }
 }
 
 void rabbitMQ::RabbitMQconsumer::onMessage(std::string message)
 {
     std::cout << "Message recieved: " << message << std::endl;
+}
+
+void rabbitMQ::RabbitMQconsumer::stopConsume()
+{
+    consume = false;
 }

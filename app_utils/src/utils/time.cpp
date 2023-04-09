@@ -41,3 +41,17 @@ void utils::Time::printNowTime()
     std::cout << 30 + ltm->tm_min << ":";
     std::cout << ltm->tm_sec << std::endl;
 }
+
+void utils::Time::holdThread(int seconds)
+{
+    bool hold = true;
+    uint64_t pre = getEpocTimeInMicroseconds();
+    while (hold)
+    {
+        uint64_t now = getEpocTimeInMicroseconds();
+        if ((int)(now - pre) == (seconds * 1000000))
+        {
+            hold = false;
+        }
+    }
+}

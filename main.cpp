@@ -3,13 +3,17 @@
 #include <chrono>
 #include <thread>
 
+#include <utils/time.h>
 #include <utils/ThreadPool.h>
 #include <rabbitMQ/producer.h>
 #include <rabbitMQ/consumer.h>
 
 void sendMessage(rabbitMQ::RabbitMQprocuder *rabbitMQproducer, std::string url, std::string exchange, std::string queue)
 {
-    rabbitMQproducer->produceMessage(url, exchange, queue, "Hello", "key");
+    for (int i= 0; i < 5; i++)
+    {
+        rabbitMQproducer->produceMessage(url, exchange, queue, "Hello", "key");
+    }
 }
 
 void consumeMessage(rabbitMQ::RabbitMQconsumer *rabbitMQconsumer, std::string url, std::string queue)
@@ -29,11 +33,13 @@ int main()
 
     rabbitMQ::RabbitMQconsumer *rabbitMQconsumer = new rabbitMQ::RabbitMQconsumer();
     pool.addTask("consumer", std::bind(consumeMessage, rabbitMQconsumer, url, queue));
-    
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    utils::Time::holdThread(5);
 
     rabbitMQ::RabbitMQprocuder *rabbitMQproducer = new rabbitMQ::RabbitMQprocuder();
     pool.addTask("producer", std::bind(sendMessage, rabbitMQproducer, url, exchange, queue));
+
+    utils::Time::holdThread(20);
 
     pool.joinAll();
     return 0;
