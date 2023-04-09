@@ -3,9 +3,9 @@
 #include "AMQPcpp.h"
 #include "consumer.h"
 
-rabbitMQ::RabbitMQconsumer::RabbitMQconsumer()
-{
-}
+rabbitMQ::RabbitMQconsumer::RabbitMQconsumer() {}
+
+rabbitMQ::RabbitMQconsumer::~RabbitMQconsumer() {}
 
 void rabbitMQ::RabbitMQconsumer::consumeMessages(std::string url, std::string queue)
 {
@@ -19,19 +19,17 @@ void rabbitMQ::RabbitMQconsumer::consumeMessages(std::string url, std::string qu
 
         AMQPMessage *rabbitMQmessage = rabbitMQqueue->getMessage();
 
-        std::cout << "count: " << rabbitMQmessage->getMessageCount() << std::endl;
         if (rabbitMQmessage->getMessageCount() > -1)
         {
             uint32_t j = 0;
-            std::cout << "message\n"
-                      << rabbitMQmessage->getMessage(&j) << "\nmessage key: " << rabbitMQmessage->getRoutingKey() << std::endl;
-            std::cout << "exchange: " << rabbitMQmessage->getExchange() << std::endl;
-            std::cout << "Content-type: " << rabbitMQmessage->getHeader("Content-type") << std::endl;
-            std::cout << "Content-encoding: " << rabbitMQmessage->getHeader("Content-encoding") << std::endl;
+            onMessage(rabbitMQmessage->getMessage(&j));
         }
         else
             break;
     }
 }
 
-rabbitMQ::RabbitMQconsumer::~RabbitMQconsumer() {}
+void rabbitMQ::RabbitMQconsumer::onMessage(std::string message)
+{
+    std::cout << "Message recieved: " << message << std::endl;
+}
