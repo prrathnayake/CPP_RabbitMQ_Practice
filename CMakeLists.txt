@@ -18,4 +18,15 @@ add_executable(${PROJECT_NAME} ${files})
 find_package(rabbitmq-c REQUIRED)
 
 target_link_libraries(${PROJECT_NAME}
+     PUBLIC app_utils
      amqpcpp)
+
+target_link_libraries(${PROJECT_NAME}
+     PUBLIC app_utils
+)
+
+target_include_directories(${PROJECT_NAME}
+     PUBLIC app_utils/src)
+
+message(STATUS "Adding subdirectories to package")
+add_subdirectory(app_utils/src)
